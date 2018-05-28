@@ -1,0 +1,18 @@
+<div id="courses-description" ng-controller="CourseController">
+    <div class="left-sidebar left-sidebar-text">
+        <div class="left-sidebar-name">Доступные курсы:</div>
+        <div class="courses">
+            <div class="left-sidebar-element" ng-repeat="course in courses" ng-click="getCourseDescription(course.id,$index)" data-id="{{course.id}}">{{course.name}}</div>
+        </div>
+    </div>
+    
+    <div id="description">
+        <div id="logo-and-course">
+            <img src="{{getSrc(activecoursepage)}}">
+            <div id="course-name">{{courses[activecoursepage].name}}</div>
+        </div>
+        <div ng-bind-html="course_description.text"></div>
+    </div>
+
+</div>
+

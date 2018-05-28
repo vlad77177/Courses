@@ -1,0 +1,205 @@
+<div id="admin-main">
+    
+    <div id="admin-pages">
+        <div ng-class="{true:'admin-page-active',false:'admin-page-default'}[adminpage==1]" ng-click="changeAdminPage(1)">Пользователи</div>
+        <div ng-class="{true:'admin-page-active',false:'admin-page-default'}[adminpage==2]" ng-click="changeAdminPage(2)">Курсы</div>
+        <div ng-class="{true:'admin-page-active',false:'admin-page-default'}[adminpage==3]" ng-click="changeAdminPage(3)">Тесты</div>
+    </div>
+    
+    <hr>
+    
+    <div id="users" ng-show="adminpage==1" ng-init="enabletextarea=false;" ng-controller="adminUserController">
+        <div id="users-list">
+            <div>Пользователи системы</div>
+            <hr>
+            <div class="user-in-list" ng-repeat="user in users">
+                <table>
+                    <tr class="pointer" ng-click="getUserInfo(user.id)" ng-class="{true:'activepage',false:''}[selecteduser.id==user.id]"><td>{{$index+1}} : {{user.login}}</td><td ng-show="user.administrator==1">Администратор</td></tr>
+                </table>
+            </div>
+            <hr>
+            <div id="create-user-form">
+                <input id="newuserlogin" type="text" ng-model="newuser.login"><label for="newuserlogin">Логин</label>
+                <input id="newuseremail" type="text" ng-model="newuser.email"><label for="newuseremail">E-Mail</label>
+                <button ng-click="createNewUser()" class="button1">Создать нового пользователя</button>
+            </div>
+        </div>
+        <div id="user-card">
+            <div>Выбранный пользователь:</div>
+            <hr>
+            <div id="user-description" ng-show="someuserselected==true">
+                <table>
+                    <tr><td>Логин:</td><td ng-show='changelogin==false' ng-init='changelogin=false'>{{selecteduser.login}}</td><td ng-show='changelogin==true'><input ng-model='selecteduser.login'></td><td><button ng-show='changelogin==false' ng-click='changelogin=!changelogin' class="button1">Изменить</button><button class="button1" ng-show='changelogin==true' ng-click='updateLogin(selecteduser);changelogin=!changelogin;changeAdminPage(1)'>Сохранить</button></td></tr>
+                    <tr><td>Email:</td><td ng-show='changeemail==false' ng-init='changeemail=false'>{{selecteduser.email}}</td><td ng-show='changeemail==true'><input ng-model='selecteduser.email'></td><td><button ng-show='changeemail==false' ng-click='changeemail=!changeemail' class="button1">Изменить</button><button class="button1" ng-show='changeemail==true' ng-click='updateEmail(selecteduser);changeemail=!changeemail;changeAdminPage(1)'>Сохранить</button></td></tr>
+                    <tr ng-show="selecteduser.administrator==0"><td><button class="button1" ng-click="deleteUser(selecteduser);changeAdminPage(1)">Удалить пользователя</button></td></tr>
+                </table>
+                <hr>
+                <div ng-show='selecteduser.administrator==0'>
+                    <div>Курсы:</div>
+                        <div ng-repeat="course in selecteduser.signed">
+                            <div>{{course.name}}</div>
+                            <div ng-repeat="lesson in course.lessons">
+                                <div ng-class="{true:'user-lesson-learned',false:'user-lesson-unlearned'}[course.learned>$index]">{{lesson.name}}</div>
+                            </div>
+                            <button class="button1" ng-click='deleteUserCourse(course.id)'>Отписать от курса</button>
+                            <hr>
+                        </div>
+                    <div ng-show="selecteduser.unsigned.length>0">
+                        <select ng-model="selectedcourse" ng-options="option.id as option.name for option in selecteduser.unsigned">
+                        </select>
+                        <button class="button1" ng-click="addUserCourse()">Добавить курс</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="courses-settings" ng-show="adminpage==2" ng-init="showdescription=true" ng-controller="adminCourseController">
+    
+        <div class="left-sidebar left-sidebar-text">
+            <div class="left-sidebar-name">Доступные курсы:</div>
+            <hr>
+            <div class="courses">
+                <div ng-repeat="course in courses" data-id="{{course.id}}">
+                    <div class="left-sidebar-element" ng-click="getCourseDescription(course.id,$index)" ng-class="{true:'activepage',false:''}[$index==activecoursepage]">{{course.name}}</div>
+                    <div class="left-sidebar-element" ng-repeat="lesson in course.lessons">
+                        <div class="lessons left-sidebar-element" ng-click="getLessonContent(course.id,lesson.id,$parent.$index,$index)" ng-class="{true:'activepage',false:''}[$index==activelessonpage && $parent.$index==activecoursepage]" ng-bind="lesson.name"></div>
+                    </div>
+                    <button class="button1" ng-click="createNewLesson(course.id);">Создать новый урок</button>
+                    <hr>
+                </div>
+            </div>
+            <hr>
+            <button class="button1" ng-click='createNewCourse();changeAdminPage(2)'>Создать новый курс</button>
+            <hr>
+        </div>
+        
+        <div id="description" ng-show="showdescription==true">
+            <div id="logo-and-course" ng-init="changedesc=false">
+                <img src="{{getSrc(activecoursepage)}}">
+                <div id="course-name" ng-show="changedesc==false">{{courses[activecoursepage].name}}</div>
+                <input ng-model="courses[activecoursepage].name" ng-show="changedesc==true">
+                <button class="button1" ng-show="changedesc==false" ng-click="changedesc=!changedesc">Изменить название</button>
+                <button class="button1" ng-click="deleteCourse(courses[activecoursepage]);changeAdminPage(2);activecoursepage=0">Удалить курс</button>
+                <button class="button1" ng-show="changedesc==true" ng-click="saveCourseName(courses[activecoursepage]);changedesc=!changedesc;changeAdminPage(2)">Сохранить</button>
+            </div>
+                <div class="editable-text-block" ng-bind-html="course_description.text" ng-show="enabletextarea==false"></div>
+                    <button class="button1 button-fixed-width" ng-click="setEditableArea(course_description.text,'course');enabletextarea=!enabletextarea" ng-show="enabletextarea==false">Редактировать</button>
+                    <div ng-show="enabletextarea==true">
+                        <textarea id="input-course" name="input-course"></textarea>
+                        <button class="button1" ng-show="enabletextarea==true" ng-click="saveChanges(course_description,'course',1);enabletextarea=!enabletextarea">Сохранить</button>
+                </div>
+        </div>
+
+        <div id="description" ng-show="showdescription==false" ng-init="showlessonname=true">
+            
+            <div id="lesson-name" ng-show="showlessonname==true" ng-bind="courses[activecoursepage].lessons[activelessonpage].name"></div>
+            <textarea ng-show="showlessonname==false" ng-model="courses[activecoursepage].lessons[activelessonpage].name"></textarea>
+            <button class="button1 button-fixed-width" ng-show="showlessonname==true" ng-click="showlessonname=false">Изменить название</button>
+            <button class="button1 button-fixed-width" ng-click="deleteLesson(courses[activecoursepage].lessons[activelessonpage]);changeAdminPage(2);activelessonpage=activelessonpage-1">Удалить урок</button>
+            <button class="button1 button-fixed-width" ng-show="showlessonname==false" ng-click="saveLessonName(courses[activecoursepage].lessons[activelessonpage]);showlessonname=true">Сохранить</button>
+             
+            <div class="editable-text-block" ng-bind-html="lesson_content.text" ng-show="enabletextarea==false"></div>
+                    <button class="button1 button-fixed-width" ng-click="setEditableArea(lesson_content.text,'lesson');enabletextarea=!enabletextarea" ng-show="enabletextarea==false">Редактировать</button>
+                    <div ng-show="enabletextarea==true">
+                        <textarea id="input-lesson" name="input-lesson"></textarea>
+                        <button class="button1" ng-show="enabletextarea==true" ng-click="saveChanges(lesson_content,'lesson',1);enabletextarea=!enabletextarea">Сохранить</button>
+            </div>
+        </div>
+        
+    </div>
+    
+    <div id="tests" ng-show="adminpage==3" ng-controller="adminTestController" ng-init="enabletextarea=false">
+         
+        <div class="left-sidebar left-sidebar-text">
+            <div class="left-sidebar-name">Доступные тесты:</div>
+            <hr>
+            <div class="tests">
+                <div ng-repeat="test in tests" data-id="{{test.id}}">
+                    <div ng-click="getTestDescription(test.id,$index)" ng-bind="test.name" ng-class="{true:'activepage',false:''}[$index==activetestpage]"></div>
+                        <div class="left-sidebar-element" ng-repeat="question in test.questions">
+                            <div class="questions left-sidebar-element" ng-bind="question.name" ng-click="getQuestionContent($parent.$index,$index)" ng-class="{true:'activepage',false:''}[$index==activequestionpage && $parent.$index==activetestpage]"></div>
+                        </div>
+                        <button class="button1" ng-click="addNewQuestion(test.id)">Добавить вопрос</button>
+                        <hr>
+                </div>
+            </div>
+            <hr>
+            <button class="button1" ng-click='createNewTest()'>Создать новый тест</button>
+            <hr>
+        </div>
+
+        <div id="description" ng-show="showdescription==true" ng-init="activetestpage=0;activequestionpage=0;showdescription=true;">
+            <div id="test-name" ng-init="changedesc=false">
+                
+                <div id="test-question-name">
+                    
+                    <table>
+                        <tr>
+                            <td><div id="test-name-block" ng-show="changedesct==false" ng-bind="tests[activetestpage].name"></div></td>
+                            <td>
+                                <input ng-model="tests[activetestpage].name" ng-show="changedesct==true">
+                                <button class="button1" ng-show="changedesct==false" ng-click="changedesct=!changedesct">Изменить название</button>
+                                <button class="button1" ng-show="changedesct==true" ng-click="saveTestName(tests[activetestpage]);changedesct=!changedesct;changeAdminPage(3)">Сохранить</button>
+                                <button class="button1" ng-click="deleteTest(tests[activetestpage]);changeAdminPage(3);activetestpage=0">Удалить тест</button>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table>
+                        <tr><td>Выбор курсов:</td>
+                            <td>
+                                <select ng-model="tests[activetestpage].for_course_id" ng-options="course.id as course.name for course in courses"></select>
+                            </td>
+                        </tr>
+                        <tr><td>Тест активен:</td><td><input intbooleanvalidation type="checkbox" ng-model="tests[activetestpage].active"/></td></tr>
+                        <tr><td>Перемешивать вопросы:</td><td><input intbooleanvalidation type="checkbox" ng-model="tests[activetestpage].mix_q"/></td></tr>
+                        <tr><td>Перемешивать варианты ответов:</td><td><input intbooleanvalidation type="checkbox" ng-model="tests[activetestpage].mix_var"/></td></tr>
+                        <tr><td>Разрешить перезапуск теста:</td><td><input intbooleanvalidation type="checkbox" ng-model="tests[activetestpage].reload"/></td></tr>
+                        <tr><td>Разрешить пропуск вопросов:</td><td><input intbooleanvalidation type="checkbox" ng-model="tests[activetestpage].can_pass"/></td></tr>
+                        <tr><td>Лимит попыток(0-разрешить перезапуск всегда)</td><td><input type="text" ng-model="tests[activetestpage].reload_try"></td></tr>
+                        <tr><td>Выводить </td><td><input type="text" ng-model="tests[activetestpage].display_q"></td><td> вопросов</td></tr>
+                        <tr><td>Порог прохождения </td><td><input type="text" ng-model="tests[activetestpage].threshold"></td><td> вопросов</td></tr>
+                        <tr><td>Время на прохождение </td><td><input type="text" ng-model="tests[activetestpage].minute_on_pass"></td><td> минут</td></tr>
+                    </table>
+                    <button class="button1 button-fixed-width" ng-click="changeTestSettings(tests[activetestpage]);changeAdminPage(3)">Сохранить настройки</button>
+                    <hr>
+                    
+                    <table>
+                        <tr>
+                            <td><div id="question-name-block" ng-show="changedescq==false">{{tests[activetestpage].questions[activequestionpage].name}}</div></td>
+                            <td>
+                                <input ng-model="tests[activetestpage].questions[activequestionpage].name" ng-show="changedescq==true">
+                                <button class="button1" ng-show="changedescq==false" ng-click="changedescq=!changedescq">Изменить название</button>
+                                <button class="button1" ng-show="changedescq==true" ng-click="saveQuestionName(tests[activetestpage].questions[activequestionpage]);changedescq=!changedescq;changeAdminPage(3)">Сохранить</button>
+                                <button class="button1" ng-click="deleteQuestion(tests[activetestpage].questions[activequestionpage],tests[activetestpage]);changeAdminPage(3);activequestionpage=0">Удалить вопрос</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div>Текст вопроса:</div>
+            <div ng-init="changequestion=false;" class="editable-text-block" ng-bind-html="tests[activetestpage].questions[activequestionpage].text"></div>
+            <button class="button1 button-fixed-width" ng-click="setEditableArea(tests[activetestpage].questions[activequestionpage].text,'test-question-variant');changequestion=true;enabletextarea=true;" ng-show="enabletextarea==false">Редактировать</button>
+            
+            <hr>
+            
+            <div>Варианты ответов:</div>
+            <div ng-init="localindex=0;changevariant=false;">
+                <div ng-repeat="variant in tests[activetestpage].questions[activequestionpage].variants" ng-show="enabletextarea==false">
+                    <div ng-bind-html="variant.text" class="editable-text-block etb-radius variant" ng-class="{true:'isright',false:''}[variant.isright==true]" ng-click="changeVariantIsRight(variant);changeAdminPage(3);"></div> 
+                    <button class="button1" ng-click="setEditableArea(tests[activetestpage].questions[activequestionpage].variants[$index].text,'test-question-variant');$parent.changevariant=true;$parent.localindex=$index;enabletextarea==true;" ng-show="enabletextarea==false">Редактировать</button>    
+                    <button class="button1" ng-click="deleteVariant(tests[activetestpage].questions[activequestionpage].variants[$index]);changeAdminPage(3);">Удалить</button>
+                </div>
+            </div>
+            
+            <div ng-show="enabletextarea==true">
+                <textarea id="input-test-question-variant" name="input-test-question-variant"></textarea>
+                <button class="button1" ng-show="enabletextarea==true && changequestion==true" ng-click="saveChanges(tests[activetestpage].questions[activequestionpage],'test-question-variant',1);changequestion=false;enabletextarea=false;">Сохранить</button>
+                <button class="button1" ng-show="enabletextarea==true && changevariant==true" ng-click="saveChanges(tests[activetestpage].questions[activequestionpage].variants[localindex],'test-question-variant',1);changevariant=false;enabletextarea=false;">Сохранить</button>
+            </div>
+            
+            <button class="button1 button-fixed-width" ng-click="addVariant(activetestpage,activequestionpage);">Добавить вариант</button>
+        </div>
+</div>

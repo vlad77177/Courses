@@ -1,0 +1,321 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 01.02.2018, 20:03:37
+    Author     : Владислав
+*/
+html,body{
+    height:100%;
+    margin: 0px;
+}
+html{
+    display:flex;
+    justify-content: center;
+    position:absolute;
+    overflow: scroll;
+}
+body{
+    width:75vw;
+}
+.content{
+    flex:1 0 auto;
+    min-height: 60vh;
+    /*background:url(images/back.png);*/
+    /*background-size: 50% 50%;*/
+    background-repeat: repeat;
+}
+header{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #000066;
+    height:20vh;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.header-text{
+    color:#ffffff;
+    font-size: 24pt;
+    width: 100%;
+    text-align: center;
+    text-shadow: 1px 1px 2px black, 0 0 1em white;
+}
+footer{
+    flex:0 0 auto;
+    background-color: #cccccc;
+    height:15vh;
+}
+.pointer{
+    cursor: pointer;
+}
+.l-form{
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-right: 5vh;
+}
+.l-form button{
+    width:auto;
+}
+#courses-description,#admin-main,#courses-settings,#tests,#users{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#admin-main{
+    flex-direction: column;
+    justify-content: center;
+}
+#admin-pages{
+    display:flex;
+    flex-direction:row;
+    margin:10px 0px 10px 0px;
+    justify-content: center;
+}
+#admin-pages div{
+    border:2px solid #000066;
+    text-align: center;
+    padding: 5px;
+    width:25%;
+    margin:0px 2px 0px 2px;
+    cursor: pointer;
+}
+.left-sidebar{
+    background-color: #ffffff;
+    border-right: 1px solid black;
+    min-height: 65vh;
+    width:20%;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
+.left-sidebar-name{
+    border-bottom: 2px solid #000066;
+    text-align: center;
+    padding-bottom: 3vh;
+    margin-bottom: 3vh;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    font-size: 18pt;
+}
+.left-sidebar-element{
+    margin-top: 0.1vw;
+    margin-bottom: 0.1vw;
+    cursor: pointer;
+    padding-top: 0.1vw;
+    padding-bottom: 0.1vw;
+    border-radius: 5px;
+    padding-left: 0.5vw;
+    margin-right: 0.5vw;
+}
+.left-sidebar-element:hover{
+    background-color: #000066;
+    color: #ffffff;
+    text-shadow: #ffffff 0 0 0, #ffffff 0 0 0, 
+                 #ffffff 0 0 0, #ffffff 0 0 0, 
+                 #ffffff 0 0 0;
+    cursor: pointer;
+}
+.left-sidebar-text{
+    color: #666666;
+    font-size: 14pt;
+    text-shadow: #d1d1d1 1px 1px 0, #d1d1d1 2px 2px 0, 
+                 #d1d1d1 1px 3px 0, #d1d1d1 2px 2px 0, 
+                 #d1d1d1 3px 1px 0;
+}
+#users-list{
+    width:50%;
+}
+#description,.description{
+    display:flex;
+    flex-direction: column;
+    width:80%;
+    padding:0px 20px 0px 20px;
+    margin-top: 5vh;
+}
+#course-name,#test-name-block,#question-name-block,#lesson-name{
+    text-align: center;
+    font-size: 21pt;
+    margin-right:30%;
+}
+#test-question-name{
+    display:flex;
+    flex-direction: column;
+}
+#logo-and-course,#test-name{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+#logo-and-course img{
+    width:150px;
+    height:150px;
+}
+.lessons,.questions{
+    margin-left:10px;
+}
+.admin-page-default{
+    
+}
+.admin-page-active{
+    background-color: #000066;
+    color:white;
+}
+/*
+#users{
+    display:flex;
+    flex-direction: row;
+    width:100%;
+}*/
+.user-in-list{
+    color:#000066;
+    display: flex;
+    flex-direction: row;
+}
+.user-in-list table tr td:nth-child(2){
+    color:red;
+}
+#create-user-form{
+    display:flex;
+    flex-direction: column;
+    width:40%;
+    justify-content: center;
+}
+#user-in-lists,#user-card{
+    width:50%;
+}
+#user-in-lists{
+    margin-left:10%;
+}
+#user-card{
+    margin-rigth:10%;
+}
+#user-description{
+    display:flex;
+    flex-direction: column;
+}
+.user-lesson-learned,.user-lesson-unlearned{
+    margin-left:10%;
+}
+.user-lesson-learned{
+    color:#33cc00;
+}
+hr{
+    width:80%;
+}
+#user-main{
+    display:flex;
+    flex-direction: row;
+}
+
+.editable-text-block{
+    padding:5px 5px 5px 5px;
+    border:1px solid;
+    border-color: #d1d1d1;
+    background-color: #ffffff;
+    margin: 5px 0px 5px 0px;
+}
+.etb-radius{
+    border-radius: 3px;
+    border:2px solid #000066;
+}
+input[type="text"],input[type="password"]{
+   border: 1px solid #cccccc;
+   border-radius: 3px;
+   -webkit-border-radius: 3px;
+   -moz-border-radius: 3px; 
+   -khtml-border-radius: 3px; 
+   background: #ffffff !important; 
+   outline: none; 
+   color: #000066;
+   font-size: 11px;
+   font-family: Tahoma;
+   min-height:3vh;
+   margin-bottom: 3px;
+}
+.button1{
+    text-decoration:none; 
+    text-align:center; 
+
+    font:17px Tahoma, Geneva, sans-serif; 
+    font-weight:bold; 
+    color:#ffffff; 
+    background:#000066; 
+    -webkit-box-shadow:0px 0px -20px #bababa, inset 0px 0px -3px #ffffff; 
+    -moz-box-shadow: 0px 0px -20px #bababa,  inset 0px 0px -3px #ffffff;  
+    box-shadow:0px 0px -20px #bababa, inset 0px 0px -3px #ffffff;  
+    
+    cursor: pointer;
+}
+.button2{
+    text-decoration:none; 
+    text-align:center; 
+    border:solid 1px #000066; 
+
+    font:17px Tahoma, Geneva, sans-serif; 
+    font-weight:bold; 
+    color:#000066; 
+    background:#ffffff; 
+    -webkit-box-shadow:0px 0px -20px #bababa, inset 0px 0px -3px #ffffff; 
+    -moz-box-shadow: 0px 0px -20px #bababa,  inset 0px 0px -3px #ffffff;  
+    box-shadow:0px 0px -20px #bababa, inset 0px 0px -3px #ffffff;  
+    
+    cursor: pointer;
+}
+.button-fixed-width{
+    width:10vw;
+}
+.isright{
+    background-color: #000066;
+    color:white;
+}
+.activepage{
+    background-color: #d1d1d1;
+}
+.variant{
+    cursor: pointer;
+}
+#test-active{
+    font-size: 16pt;
+}
+#test-question-name{
+    border: 2px solid #000066;
+    border-radius: 3px;
+    width:100%;
+}
+#test-question{
+    background-color: #bababa;
+    border-radius: 3px;
+    margin: 2vw;
+    font-size: 18pt;
+}
+#question-block,.variant-block{
+    border:2px solid #000066;
+    border-radius: 3px;
+    margin: 20px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+.variant-block{
+    cursor: pointer;
+}
+#test-settings{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#question-number,#timeout{
+    background-color: #bababa;
+}
+#userlogged{
+    color:#ffffff;
+    font-size: 16pt;
+    border: 2px solid #ffffff;
+    text-align: center;
+    padding: 5px;
+}
+

@@ -1,0 +1,49 @@
+<!doctype html>
+<html ng-app="App">
+<head>
+<meta charset="utf-8">
+    <link rel="stylesheet" href="css/mystyles.css" />
+    
+    <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/angular-sanitize.js"></script>
+        
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript"></script>
+    <!--<script src="ckeditor.js"></script>-->
+    
+    <script src="ckeditor/ckeditor.js"></script>
+    <script src="ckeditor/config.js"></script>
+    <script src="ckeditor/ckeplugins.js"></script>
+    <script src="ckeditor/build-config.js"></script>
+    <script src="ckeditor/styles.js"></script>
+      
+    <script src="js/app.js"></script>
+    <script src="js/controllers/AppController.js"></script>
+    <script src="js/controllers/adminTestController.js"></script>
+    <script src="js/controllers/adminUserController.js"></script>
+    <script src="js/controllers/adminCourseController.js"></script>
+    <script src="js/controllers/CourseController.js"></script>
+    <script src="js/directives.js"></script>
+    <script src="js/filters.js"></script>
+
+</head>
+
+<body ng-controller="AppController">
+    
+    <header>
+        <div class="header-text">Демонстрационная система</div>
+        <login-form ng-show="!ulog"></login-form>
+        <already-log ng-show="ulog"></already-log>
+    </header>
+
+    <div class="content">
+        <courses-description ng-show="!ulog"></courses-description>
+        <user-main ng-show="ulog && !uadmin"></user-main>
+        <admin-main ng-show="ulog && uadmin"></admin-main>
+    </div>
+    
+    <footer>
+        v0.1{{showdescription}}
+    </footer>
+
+</body>
+</html>

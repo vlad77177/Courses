@@ -1,0 +1,45 @@
+<div id="user-main" ng-controller="CourseController">
+    
+    <div class="left-sidebar left-sidebar-text">
+        <div class="left-sidebar-name">Доступные курсы:</div>
+        <hr>
+            <div class="courses">
+                <div ng-repeat="course in courses" data-id="{{course.id}}" ng-show="checkUserSignedCourse(course)">
+                    <div class="left-sidebar-element" ng-click="getCourseDescription(course.id,$index)">{{course.name}}</div>
+                    <div ng-repeat="lesson in course.lessons">
+                        <div class="lessons left-sidebar-element" ng-bind="lesson.name" ng-click="getLessonContent(course.id,lesson.id)"></div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    
+    <div id="description" ng-show="!testactive && !showresult && showdescription">
+        <div id="logo-and-course">
+            <img ng-repeat="c in courses" ng-show="activecoursepage==$index" src="{{getSrc($index)}}">
+            <div id="course-name">{{courses[activecoursepage].name}}</div>
+        </div>
+        <div ng-bind-html="course_description.text"></div>
+        <button ng-show="!alreadyinit" class="button1 button-fixed-width" ng-click="initTest(courses[activecoursepage])">Пройти тест</button>
+        <button ng-show="alreadyinit" class="button1" ng-click="continueTest()">Продолжить тест... Осталось {{clockmodel}}</button>
+    </div>
+    
+    <div id="lesson-active" ng-show="!showdescription">
+        <div ng-bind-html="lesson_content.text"></div>
+    </div>
+    
+    <div id="test-active" ng-show="testactive">
+        <div id="question-block">
+            <div id="test-settings">
+                <div id="question-number">Вопрос: {{testpage+1}}</div>
+                <div id="timeout" ng-bind="clockmodel"></div>
+            </div>
+            <div id="test-question" ng-bind-html="test.questions[testpage].text"></div>
+        </div>
+        <div>
+            <div class="variant-block" ng-class="{true:'activepage'}[test.questions[testpage].ansvers.indexOf($index+1)]" ng-click="ansver($index)" ng-repeat="variant in test.questions[testpage].variants" ng-bind-html="variant.text"></div>
+        </div>
+    </div>
+    
+    <div id="result" ng-show="showresult">Ваш результат: {{result.score}} из {{result.all}} при пороге прохождения {{result.threshold}}</div>
+    
+</div>
